@@ -13,8 +13,32 @@ public class Main {
         list.add(p3);
         list.add(p4);
         list.add(p5);
-        Collections.sort(list, new PersonNewComparator(3));
+
+        Comparator<Person> comparator = (o1, o2) -> {
+            if (!notLessMaxWord(o1.surname,o2.surname)) {
+                if (qWords(o1.surname) > qWords(o2.surname)) {
+                    return 1;
+                } else if (qWords(o1.surname) < qWords(o2.surname)) {
+                    return -1;
+                }
+            }
+            return Integer.compare(o1.age, o2.age);
+        };
+
+        Collections.sort(list, comparator);
         Collections.reverse(list);
         System.out.println(list);
+    }
+
+    public static boolean notLessMaxWord(String s1, String s2) {
+        if ((qWords(s1) >= 3) && (qWords(s2) >= 3)) {
+            return true;
+        } else return false;
+    }
+
+    public static int qWords(String surname) {
+        Set<String> set = new HashSet<>();
+        Collections.addAll(set, surname.split("\\P{IsAlphabetic}+"));
+        return set.size();
     }
 }
